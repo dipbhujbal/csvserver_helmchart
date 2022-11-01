@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  prometheus.yaml: |
+    scrape_configs:
+     - job_name: 'csvserver'
+       scrape_interval: {{ .Values.prometheus.scrape_interval }}
+       static_configs:
+       - targets:  ['{{ .Release.Name }}-csvserver:{{ .Values.csvserver.servicePort}}']
+       metrics_path: "/metrics"
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-prometheus
+
+

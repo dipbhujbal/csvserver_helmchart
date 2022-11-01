@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-csvserver
+  labels:
+  {{- include "csvserver.labels" .| nindent 4 }}
+spec:
+  replicas: {{ .Values.csvserver.replica_count }} 
+  selector:
+    matchLabels:
+      {{- include "csvserver.selectorLabels" .|nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "csvserver.selectorLabels" .| nindent 8 }}
+    spec:
+      containers:
+      {{- $relname := .Release.Name }}
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        name: {{ $relname }}
+        env:
+         {{- range $key, $val := .Values.csvserver.env }}
+           - name: {{ $key }}
+             value: {{ $val | quote }}
+         {{- end }}
+        ports:
+        - containerPort: {{ .Values.csvserver.containerPort }}
+        volumeMounts:
+        - name: {{ $relname }}-configmapvol
+          mountPath: {{ .Values.csvserver.mountpath }}
+          subPath: {{ .Values.csvserver.subpath }}
+      volumes:
+      - name: {{ $relname }}-configmapvol
+        configMap:
+          name: {{ $relname }}-csvserver
+    

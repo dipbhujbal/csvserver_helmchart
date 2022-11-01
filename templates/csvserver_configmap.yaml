@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-csvserver
+data:
+  inputdata: |-
+    {{- .Files.Get "inputFile.csv" | nindent 4 }}
