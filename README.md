@@ -3,7 +3,7 @@
 - Add the helm repo 
 
 ```
-helm repo add < repo-name > https://github.com/dipbhujbal/helm_chart
+helm repo add < repo-name > https://github.com/dipbhujbal/csvserver_helmchart
 ```
 - Install the chart 
 
